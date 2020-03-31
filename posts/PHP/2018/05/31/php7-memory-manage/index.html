@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//static.xpisme.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PHP7 内存管理 （二）">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7 内存管理 （二）">
+<meta property="og:url" content="http://gxpisme.github.io/posts/PHP/2018/05/31/php7-memory-manage/index.html">
+<meta property="og:site_name" content="Xpisme&#39;s Blog">
+<meta property="og:description" content="PHP7 内存管理 （二）">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cdn.xpisme.com/201805311025_878.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805311043_524.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805311118_61.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805311157_918.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805311234_943.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201806011231_240.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201806011429_120.png">
+<meta property="og:updated_time" content="2019-01-05T08:49:54.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7 内存管理 （二）">
+<meta name="twitter:description" content="PHP7 内存管理 （二）">
+<meta name="twitter:image" content="http://cdn.xpisme.com/201805311025_878.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gxpisme.github.io/posts/PHP/2018/05/31/php7-memory-manage/"/>
+
+
+
+
+
+  <title>PHP7 内存管理 （二） | Xpisme's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xpisme's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我们风华正茂，还有诗和远方。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gxpisme.github.io/posts/PHP/2018/05/31/php7-memory-manage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xpisme">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xpisme's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP7 内存管理 （二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-31T10:12:19+08:00">
+                2018-05-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote class="blockquote-center"><p>PHP7 内存管理 （二） </p>
+</blockquote>
+<a id="more"></a>
+<h2 id="内存初始化"><a href="#内存初始化" class="headerlink" title="内存初始化"></a>内存初始化</h2><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">static zend_mm_heap *zend_mm_init(void)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 向系统申请2MB大小的chunk</span></span><br><span class="line">    zend_mm_chunk *chunk = (zend_mm_chunk*)zend_mm_chunk_alloc_int(ZEND_MM_CHUNK_SIZE, ZEND_MM_CHUNK_SIZE);</span><br><span class="line">    zend_mm_heap *heap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// heap结构实际是主chunk嵌入的一个结构，后面再分配chunk的heap_slot不再使用</span></span><br><span class="line">    heap = &amp;chunk-&gt;heap_slot;</span><br><span class="line">    chunk-&gt;heap = heap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 双向链表</span></span><br><span class="line">    chunk-&gt;next = chunk;</span><br><span class="line">    chunk-&gt;prev = chunk;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 剩余可用的page数</span></span><br><span class="line">    chunk-&gt;free_pages = ZEND_MM_PAGES - ZEND_MM_FIRST_PAGE;</span><br><span class="line">    chunk-&gt;free_tail = ZEND_MM_FIRST_PAGE;</span><br><span class="line">    chunk-&gt;num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将第一个page的bit分配标识位设置为1 标识已经被分配 占用</span></span><br><span class="line">    chunk-&gt;free_map[<span class="number">0</span>] = (Z_L(<span class="number">1</span>) &lt;&lt; ZEND_MM_FIRST_PAGE) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//第一个page的类型为ZEND_MM_IS_LRUN，即large内存</span></span><br><span class="line">    chunk-&gt;map[<span class="number">0</span>] = ZEND_MM_LRUN(ZEND_MM_FIRST_PAGE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指向主chunk</span></span><br><span class="line">    heap-&gt;main_chunk = chunk; </span><br><span class="line"></span><br><span class="line">    .......</span><br><span class="line"></span><br><span class="line">    <span class="comment">// huge内存链表</span></span><br><span class="line">    heap-&gt;huge_list = NULL; </span><br><span class="line">    return heap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分配了主chunk，只有第一个chunk的heap会用到，后面分配的chunk不再用到heap，初始化完的结构如下图<br><img src="http://cdn.xpisme.com/201805311025_878.png" alt=""></p>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>Zend内存分配器按照申请内存的大小有三种不同的实现<br><img src="http://cdn.xpisme.com/201805311043_524.png" alt=""></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 内存分配</span></span><br><span class="line">ZEND_API <span class="keyword">void</span>* ZEND_FASTCALL _emalloc(size_t <span class="built_in">size</span> ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// zend_mm_alloc_heap 实现内存分配</span></span><br><span class="line">    <span class="built_in">return</span> zend_mm_alloc_heap(AG(mm_heap), <span class="built_in">size</span> ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 内存分配</span></span><br><span class="line"><span class="keyword">static</span> zend_always_inline <span class="keyword">void</span> *zend_mm_alloc_heap(zend_mm_heap *heap, size_t <span class="built_in">size</span> ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">    <span class="built_in">if</span> (<span class="built_in">size</span> &lt;= ZEND_MM_MAX_SMALL_SIZE) &#123;</span><br><span class="line">        <span class="comment">// small size</span></span><br><span class="line">        ptr = zend_mm_alloc_small(heap, <span class="built_in">size</span>, ZEND_MM_SMALL_SIZE_TO_BIN(<span class="built_in">size</span>) ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line">    &#125; <span class="built_in">else</span> <span class="built_in">if</span> (<span class="built_in">size</span> &lt;= ZEND_MM_MAX_LARGE_SIZE) &#123;</span><br><span class="line">        <span class="comment">// large size</span></span><br><span class="line">        ptr = zend_mm_alloc_large(heap, <span class="built_in">size</span> ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line">    &#125; <span class="built_in">else</span> &#123;</span><br><span class="line">        <span class="comment">// huge size</span></span><br><span class="line">        <span class="built_in">return</span> zend_mm_alloc_huge(heap, <span class="built_in">size</span> ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Huge分配"><a href="#Huge分配" class="headerlink" title="Huge分配"></a>Huge分配</h3><p>Huge是指超过2MB大小内存的分配，实际分配时将对齐到n个chunk，分配完以后还有分配一个zend_mm_huge_list结构，这个结构用于管理所有的Huge内存。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">zend_mm_alloc_huge</span><span class="params">(zend_mm_heap *heap, <span class="keyword">size_t</span> size ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 按页大小重置实际要分配的内存</span></span><br><span class="line">    <span class="keyword">size_t</span> new_size = ZEND_MM_ALIGNED_SIZE_EX(size, REAL_PAGE_SIZE);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> ZEND_MM_LIMIT</span></span><br><span class="line">    <span class="comment">// 如果有内存使用限制则check是否已达上限，达到的话进行zend_mm_gc清理后再检查</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 分配chunk</span></span><br><span class="line">    ptr = zend_mm_chunk_alloc(heap, new_size, ZEND_MM_CHUNK_SIZE);</span><br><span class="line">    <span class="keyword">if</span> (UNEXPECTED(ptr == <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        <span class="comment">/* insufficient memory */</span></span><br><span class="line">        <span class="keyword">if</span> (zend_mm_gc(heap) &amp;&amp;</span><br><span class="line">            (ptr = zend_mm_chunk_alloc(heap, new_size, ZEND_MM_CHUNK_SIZE)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            <span class="comment">/* pass */</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//申请失败</span></span><br><span class="line">            zend_mm_safe_error(heap, <span class="string">"Out of memory"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将申请的内存通过 zend_mm_add_huge_block 插入到链表中</span></span><br><span class="line">    zend_mm_add_huge_block(heap, ptr, new_size ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>分配chunk是向ZendMM系统申请的唯一粒度，也是Large、Small内存分配的基础。</li>
+<li>内存地址对齐到chunk的大小2MB，分配chunk地址都是ZEND_MM_CHUNK_SIZE的整数倍。</li>
+<li>系统返回的地址是随机的，内存池要自己移动到对齐的位置上。</li>
+</ul>
+<p>zend_mm_chunk_alloc_int<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">zend_mm_chunk_alloc</span><span class="params">(zend_mm_heap *heap, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> alignment)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> zend_mm_chunk_alloc_int(size, alignment);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">zend_mm_chunk_alloc_int</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">size_t</span> alignment)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 向系统申请size大小的内存</span></span><br><span class="line">    <span class="keyword">void</span> *ptr = zend_mm_mmap(size);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ptr == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ZEND_MM_ALIGNED_OFFSET(ptr, alignment) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 判断申请的内存是否为alignment的整数倍 如果是，就不需要处理了</span></span><br><span class="line">        <span class="keyword">return</span> ptr;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 申请的内存不是按照alignment对齐的</span></span><br><span class="line">        <span class="keyword">size_t</span> offset;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 释放申请的内存</span></span><br><span class="line">        zend_mm_munmap(ptr, size);</span><br><span class="line">        <span class="comment">//重新申请一块内存，这里会多申请一块内存，用于截取到alignment的整数倍，可以忽略REAL_PAGE_SIZE</span></span><br><span class="line">        ptr = zend_mm_mmap(size + alignment - REAL_PAGE_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// offset 为ptr距离上一个alignment对齐内存位置的大小</span></span><br><span class="line">        offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);</span><br><span class="line">        <span class="keyword">if</span> (offset != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// 该offset为alignment的整数倍</span></span><br><span class="line">            offset = alignment - offset;</span><br><span class="line">            <span class="comment">// 释放多于的内存</span></span><br><span class="line">            zend_mm_munmap(ptr, offset);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 偏移ptr， 对齐到alignment</span></span><br><span class="line">            ptr = (<span class="keyword">char</span>*)ptr + offset;</span><br><span class="line">            alignment -= offset;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (alignment &gt; REAL_PAGE_SIZE) &#123;</span><br><span class="line">            zend_mm_munmap((<span class="keyword">char</span>*)ptr + size, alignment - REAL_PAGE_SIZE);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ptr;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>宏ZEND_MM_ALIGNED_OFFSET 计算按alignment对齐的内存地址距离上一个alignment整数倍内存地址的大小 alignment必须为2的n次方，比如一段n*alignment大小的内存，ptr为其中一个位置，那么就可以通过位运算计算得到ptr所属内存块的offset<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#define</span> <span class="selector-tag">ZEND_MM_ALIGNED_OFFSET</span>(size, alignment) \</span><br><span class="line">    (((size_t)(size)) &amp; ((alignment) - <span class="number">1</span>))</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://cdn.xpisme.com/201805311118_61.png" alt=""></p>
+<p>容易理解的代码<code>offset = ptr - int取整(ptr/alignment)*alignment</code></p>
+<h3 id="large-分配"><a href="#large-分配" class="headerlink" title="large 分配"></a>large 分配</h3><ul>
+<li>申请的内存 3072Byte &lt; size &lt; 2044KB时，内存池会选择在chunk上查找对应数量的page返回。</li>
+<li>Large内存申请的粒度是page。</li>
+</ul>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">static zend_always_inline void *zend_mm_alloc_large(<span class="name">zend_mm_heap</span> *heap, size_t size ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span><br><span class="line">&#123;</span><br><span class="line">    // 根据size大小 计算需要分配多少个page</span><br><span class="line">    int pages_count = (int)ZEND_MM_SIZE_TO_NUM(size, ZEND_MM_PAGE_SIZE);</span><br><span class="line"></span><br><span class="line">    // 分配page_count个page</span><br><span class="line">    void *ptr = zend_mm_alloc_pages(<span class="name">heap</span>, pages_count ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC)<span class="comment">;</span></span><br><span class="line">    return ptr<span class="comment">; </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 宏 根据size大小 计算需要分配多少个page</span><br><span class="line">// 假设size = <span class="number">8</span>k1Byte alignment=4K 则 <span class="number">8</span>K1Byte + <span class="number">4</span>K <span class="number">-1</span>Byte = <span class="number">12</span>K / <span class="number">4</span>K = <span class="number">3</span>个page</span><br><span class="line">// 假设size = <span class="number">8</span>k alignment=4K 则 <span class="number">8</span>K + <span class="number">4</span>K <span class="number">-1</span>Byte = <span class="number">11</span>K <span class="number">1023</span>Byte / <span class="number">4</span>K = <span class="number">2</span>个page</span><br><span class="line">#define ZEND_MM_SIZE_TO_NUM(<span class="name">size</span>, alignment) \</span><br><span class="line">    (((<span class="name">size_t</span>)(<span class="name">size</span>) + ((<span class="name">alignment</span>) - <span class="number">1</span>)) / (<span class="name">alignment</span>))</span><br></pre></td></tr></table></figure>
+<p><code>zend_mm_alloc_pages</code>函数简要概述如下</p>
+<ol>
+<li>从第一个chunk开始查找当前chunk下是否有pages_count个连续可用的page，有的话就停止查找。</li>
+<li>没有的话则接着查找下一个chunk，如果直到最后一个chunk也没找到则重新分配一个新的chunk并插入chunk链表。</li>
+</ol>
+<p>如何判断是否有连续的page，是通过chunk结构中的free_map。free_map实际就是：zend_ulong free_map[16/8]，以 free_map[8] 为例，数组中的8个数字分别表示：0-63、64-127、128-191、192-255、256-319、320-383、384-447、448-511 page的分配与否，比如当前chunk的page 0、page 2已经分配，则:free_map[0] = 5</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//5:</span></span><br><span class="line"><span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000000</span> <span class="number">00000101</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://cdn.xpisme.com/201805311157_918.png" alt=""></p>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">static void *zend_mm_alloc_pages(zend_mm_heap *heap, int pages_count ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="title">zend_mm_chunk</span> *chunk = heap-&gt;</span>main_chunk;</span><br><span class="line">    int page_num, len;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从第一个chunk开始查找可用page</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//当前chunk剩余page总数已不够</span></span><br><span class="line">        <span class="function"><span class="title">if</span> (UNEXPECTED(chunk-&gt;</span>free_pages &lt; pages_count)) &#123;</span><br><span class="line">            goto not_found;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123; <span class="comment">//查找当前chunk是否有pages_count个连续可用的page</span></span><br><span class="line">            int best = -<span class="number">1</span>; <span class="comment">//已找到可用page起始页</span></span><br><span class="line">            int best_len = ZEND_MM_PAGES; <span class="comment">//已找到chunk的page间隙大小，这个值尽可能接近page_count</span></span><br><span class="line">            <span class="function"><span class="title">int</span> free_tail = chunk-&gt;</span>free_tail;</span><br><span class="line">            <span class="function"><span class="title">zend_mm_bitset</span> *bitset = chunk-&gt;</span>free_map;</span><br><span class="line">            zend_mm_bitset tmp = *(bitset++); <span class="comment">// zend_mm_bitset tmp = *bitset;  bitset++ 这里是复制出的，不会影响free_map</span></span><br><span class="line">            int i = <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">            <span class="comment">//下面就是查找最优page的过程,稍后详细分析</span></span><br><span class="line">            <span class="comment">//find best page</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">not_found:</span><br><span class="line">        <span class="function"><span class="title">if</span> (chunk-&gt;</span><span class="function"><span class="title">next</span> == heap-&gt;</span>main_chunk) &#123; <span class="comment">//是否已到最后一个chunk</span></span><br><span class="line">get_chunk:</span><br><span class="line">            ...</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="function"><span class="title">chunk</span> = chunk-&gt;</span>next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">found: <span class="comment">//找到可用page，page编号为page_num至(page_num + pages_count)</span></span><br><span class="line">    <span class="comment">/* mark run as allocated */</span></span><br><span class="line">    <span class="function"><span class="title">chunk</span>-&gt;</span>free_pages -= pages_count;</span><br><span class="line">    <span class="function"><span class="title">zend_mm_bitset_set_range</span>(chunk-&gt;</span>free_map, page_num, pages_count); <span class="comment">//将page_num至(page_num + pages_count)page的bit标识位设置为已分配</span></span><br><span class="line">    <span class="function"><span class="title">chunk</span>-&gt;</span>map[page_num] = ZEND_MM_LRUN(pages_count); <span class="comment">//map为两个值的组合值，首先表示当前page属于哪种类型，其次表示包含的page页数</span></span><br><span class="line">    <span class="function"><span class="title">if</span> (page_num == chunk-&gt;</span>free_tail) &#123;</span><br><span class="line">        <span class="function"><span class="title">chunk</span>-&gt;</span>free_tail = page_num + pages_count;</span><br><span class="line">    &#125;</span><br><span class="line">    return ZEND_MM_PAGE_ADDR(chunk, page_num);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最优page的检索过程如下 ：</p>
+<ol>
+<li>首先从第一个page分组(page 0-63)开始检查，如果当前分组无可用page(即free_map[x] = -1)则进入下一分组，直到当前分组有空闲page，然后进入第二步</li>
+<li>当前分组有可用page，首先找到第一个可用page的位置，记作page_num，接着从page_num开始向下找第一个已分配page的位置，记作end_page_num，这个地方需要注意，如果当前分组剩下的page都是可用的则会进入下一分组接着搜索，直到找到为止，这里还会借助chunk-&gt;free_tail避免无谓的查找到最后分组</li>
+<li>根据上一步找到的page_num、end_page_num可计算得到当前可用内存块大小为len个page，然后与申请的page页数(page_count)比较<br> 3.1 如果len=page_count则表示找到的内存块符合申请条件且非常完美，直接从page_num开始分配page_count个page<br> 3.2 如果len&gt;page_count则表示找到的内存块符合条件且空间很充裕，暂且记录下len、page_num，然后继续向下搜索，如果有更合适的则用更合适的替代<br> 3.3  如果len&lt;page_count则表示当前内存块不够申请的大小，不符合条件，然后将这块空间的全部page设置为已分配(这样下一轮检索就不会再次找到它了)，接着从第一步重新检索</li>
+</ol>
+<p>下面从一个例子具体看下，以64bit整形为例，假如当前page分配情况如下图-(1)(group1全部已分配;group2中page 67-68、71-74未分配，其余都已分配;group3中除page 128-129、133已分配外其余都未分配)，现在要申请3个page：<br><img src="http://cdn.xpisme.com/201805311234_943.png" alt=""></p>
+<p>检索过程：<br>    a.首先会直接跳过group1，直接到group2检索<br>    b.在group2中找到第一个可用page位置：67，然后向下找第一个不可用page位置：69，找到的可用内存块长度为2，小于3，表示此内存块不可用，这时会将page 67-68标识为已分配，图-(2)<br>    c.接着再次在group2中查找到第一个可用page位置：71,然后向下找到第一个不可用page位置：75,内存块长度为4，大于3，表示找到一个符合的位置，虽然已经找到可用内存块但并不”完美”，先将这个并不完美的page_num及len保存到best、best_len，如果后面没有比它更完美的就用它了，然后将page 71-74标示为已分配，图-(3)<br>    d.再次检索，发现group2已无可用page，进入group3，找到可用内存位置：page 130-132，大小比c中找到的合适，所以最终返回的page就是130-132，图-(4)</p>
+<p>page分配完成后会将free_map对应整数的bit位从page_num至(page_num+page_count)置为1，同时将chunk-&gt;map[page_num]置为ZEND_MM_LRUN(pages_count)，表示page_num至(page_num+page_count)这些page是被Large分配占用的。</p>
+<h3 id="small-分配"><a href="#small-分配" class="headerlink" title="small 分配"></a>small 分配</h3><ul>
+<li>首先检查申请规格的内存是否已经分配，如果没有分配或者分配的已经用完了，则申请响应页数的page。</li>
+<li>申请到page以后按固定大小将page切割为slot，slot之间构成单链表。保存在AG(mm_heap)-&gt;free_slot</li>
+</ul>
+<p>例如16byte、3072byte大小的slot，将分别申请1个、3个page，然后分割为256个16byte的slot，4个3072byte的slot。<br><img src="http://cdn.xpisme.com/201806011231_240.png" alt=""></p>
+<p><img src="http://cdn.xpisme.com/201806011429_120.png" alt=""></p>
+<p>详细的分配过程<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> zend_always_inline <span class="keyword">void</span> *<span class="title">zend_mm_alloc_small</span><span class="params">(zend_mm_heap *heap, <span class="keyword">size_t</span> size, <span class="keyword">int</span> bin_num ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (EXPECTED(heap-&gt;free_slot[bin_num] != <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        <span class="comment">// 有可用的slot</span></span><br><span class="line">        zend_mm_free_slot *p = heap-&gt;free_slot[bin_num];</span><br><span class="line">        heap-&gt;free_slot[bin_num] = p-&gt;next_free_slot;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">void</span>*)p;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 新分配slot</span></span><br><span class="line">        <span class="keyword">return</span> zend_mm_alloc_small_slow(heap, bin_num ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>zend_mm_alloc_small_slow</code>分配slot操作<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">// <span class="keyword">bin_num </span>为 free_slot 数组下</span><br><span class="line"><span class="symbol">static</span> zend_never_inline void *zend_mm_alloc_small_slow(zend_mm_heap *heap, uint32_t <span class="keyword">bin_num </span>ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC)</span><br><span class="line">&#123;</span><br><span class="line">    zend_mm_chunk *chunk<span class="comment">;</span></span><br><span class="line">    int page_num<span class="comment">;</span></span><br><span class="line">    zend_mm_bin *<span class="keyword">bin;</span></span><br><span class="line"><span class="keyword"> </span>   zend_mm_free_slot *p, *<span class="meta">end</span><span class="comment">;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // 分配固定数量的page</span><br><span class="line">    <span class="keyword">bin </span>= (zend_mm_bin*)zend_mm_alloc_pages(heap, <span class="keyword">bin_pages[bin_num] </span>ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">if</span> (UNEXPECTED(<span class="keyword">bin </span>== NULL)) &#123;</span><br><span class="line">        <span class="comment">/* insufficient memory */</span></span><br><span class="line">        return NULL<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    chunk = (zend_mm_chunk*)ZEND_MM_ALIGNED_BASE(<span class="keyword">bin, </span>ZEND_MM_CHUNK_SIZE)<span class="comment">;</span></span><br><span class="line">    page_num = ZEND_MM_ALIGNED_OFFSET(<span class="keyword">bin, </span>ZEND_MM_CHUNK_SIZE) / ZEND_MM_PAGE_SIZE<span class="comment">;</span></span><br><span class="line">    // 设置各页的分配类型</span><br><span class="line">    chunk-&gt;<span class="meta">map</span>[page_num] = ZEND_MM_SRUN(<span class="keyword">bin_num);</span></span><br><span class="line"><span class="keyword"> </span>   <span class="meta">if</span> (<span class="keyword">bin_pages[bin_num] </span>&gt; <span class="number">1</span>) &#123;</span><br><span class="line">        uint32_t i = <span class="number">1</span><span class="comment">;</span></span><br><span class="line">        </span><br><span class="line">        do &#123;</span><br><span class="line">            chunk-&gt;<span class="meta">map</span>[page_num+i] = ZEND_MM_NRUN(<span class="keyword">bin_num, </span>i)<span class="comment">;</span></span><br><span class="line">            i++<span class="comment">;</span></span><br><span class="line">        &#125; <span class="meta">while</span> (i &lt; <span class="keyword">bin_pages[bin_num]);</span></span><br><span class="line"><span class="keyword"> </span>   &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* create a linked list of elements from 1 to last 创建slot链表 */</span></span><br><span class="line">    <span class="meta">end</span> = (zend_mm_free_slot*)((char*)<span class="keyword">bin </span>+ (<span class="keyword">bin_data_size[bin_num] </span>* (<span class="keyword">bin_elements[bin_num] </span>- <span class="number">1</span>)))<span class="comment">;</span></span><br><span class="line">    // heap-&gt;free_slot[<span class="keyword">bin_num] </span>指向第<span class="number">2</span>个slot，第<span class="number">1</span>个为当前申请到的slot</span><br><span class="line">    heap-&gt;free_slot[<span class="keyword">bin_num] </span>= p = (zend_mm_free_slot*)((char*)<span class="keyword">bin </span>+ <span class="keyword">bin_data_size[bin_num]);</span></span><br><span class="line"><span class="keyword"> </span>   do &#123;</span><br><span class="line">        p-&gt;next_free_slot = (zend_mm_free_slot*)((char*)p + <span class="keyword">bin_data_size[bin_num]);</span></span><br><span class="line"><span class="keyword"> </span>       p = (zend_mm_free_slot*)((char*)p + <span class="keyword">bin_data_size[bin_num]);</span></span><br><span class="line"><span class="keyword"> </span>   &#125; <span class="meta">while</span> (p != <span class="meta">end</span>)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* terminate list using NULL */</span></span><br><span class="line">    p-&gt;next_free_slot = NULL<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* return first element  返回slot链表的第一个元素 */</span></span><br><span class="line">    return (char*)<span class="keyword">bin;</span></span><br><span class="line"><span class="keyword">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>参考资料：<a href="https://github.com/pangudashu/php7-internal/blob/master/5/zend_alloc.md" target="_blank" rel="external">https://github.com/pangudashu/php7-internal/blob/master/5/zend_alloc.md</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="xpisme wechat" style="width: 200px; max-width: 100%;"/>
+    <div>微信号</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/PHP/2018/05/24/memory-manage/" rel="next" title="PHP7 内存管理 （一）">
+                <i class="fa fa-chevron-left"></i> PHP7 内存管理 （一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/PHP/2018/06/11/php7-ext/" rel="prev" title="PHP7 扩展开发 (hello world)">
+                PHP7 扩展开发 (hello world) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="xpisme" />
+            
+              <p class="site-author-name" itemprop="name">xpisme</p>
+              <p class="site-description motion-element" itemprop="description">我们风华正茂，还有诗和远方。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/gxpisme" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:gxpisme@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                大牛链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.laruence.com/" title="Laruence" target="_blank">Laruence</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="左耳朵耗子" target="_blank">左耳朵耗子</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存初始化"><span class="nav-number">1.</span> <span class="nav-text">内存初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存分配"><span class="nav-number">2.</span> <span class="nav-text">内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Huge分配"><span class="nav-number">2.1.</span> <span class="nav-text">Huge分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#large-分配"><span class="nav-number">2.2.</span> <span class="nav-text">large 分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#small-分配"><span class="nav-number">2.3.</span> <span class="nav-text">small 分配</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xpisme</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//static.xpisme.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="HashTable">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP HashTable">
+<meta property="og:url" content="http://blog.xpisme.com/posts/programming/2018/04/09/php-hashtable/index.html">
+<meta property="og:site_name" content="Xpisme&#39;s Blog">
+<meta property="og:description" content="HashTable">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804091744_588.png">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804092102_453.png">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804091835_57.png">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804092043_106.jpg">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804092050_718.jpg">
+<meta property="og:image" content="http://oz5huhxgd.bkt.clouddn.com/201804092053_965.jpg">
+<meta property="og:updated_time" content="2018-04-16T11:04:38.721Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP HashTable">
+<meta name="twitter:description" content="HashTable">
+<meta name="twitter:image" content="http://oz5huhxgd.bkt.clouddn.com/201804091744_588.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.xpisme.com/posts/programming/2018/04/09/php-hashtable/"/>
+
+
+
+
+
+  <title>PHP HashTable | Xpisme's Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xpisme's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我们风华正茂，还有诗和远方。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xpisme.com/posts/programming/2018/04/09/php-hashtable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xpisme">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xpisme's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP HashTable</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-09T16:35:44+08:00">
+                2018-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/posts/programming/2018/04/09/php-hashtable/" class="leancloud_visitors" data-flag-title="PHP HashTable">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote class="blockquote-center"><p>HashTable </p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>环境 PHP5.6<br>PHP的数组使用哈希表（HashTable）来存储关联数据，PHP内核中的哈希表是十分重要的数据结构，PHP的大部分的语言特性都是基于哈希表实现的。</p>
+</blockquote>
+<h1 id="哈希表基本原理"><a href="#哈希表基本原理" class="headerlink" title="哈希表基本原理"></a>哈希表基本原理</h1><p><img src="http://oz5huhxgd.bkt.clouddn.com/201804091744_588.png" alt=""><br><img src="http://oz5huhxgd.bkt.clouddn.com/201804092102_453.png" alt=""><br><img src="http://oz5huhxgd.bkt.clouddn.com/201804091835_57.png" alt=""></p>
+<h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h2><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">伪代码</span><br><span class="line"></span><br><span class="line">HASH_INDEX(ht, <span class="built_in">int</span> <span class="built_in">key</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">key</span> % ht-&gt;<span class="built_in">size</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="操作接口"><a href="#操作接口" class="headerlink" title="操作接口"></a>操作接口</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">伪代码</span><br><span class="line"></span><br><span class="line">int hash_init(HashTable *ht)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>size        = HASH_TABLE_INIT_SIZE;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>elem_num    = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span><span class="function"><span class="title">buckets</span>     = calloc(ht-&gt;</span>size, sizeof(Bucket *));</span><br><span class="line">    return SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="内容插入到哈希表中"><a href="#内容插入到哈希表中" class="headerlink" title="内容插入到哈希表中"></a>内容插入到哈希表中</h3><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">伪代码（细节待完善）</span><br><span class="line"></span><br><span class="line">int hash_insert(HashTable *ht, char *key, void *value)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 判断是否需要重哈希</span></span><br><span class="line">    resize_hash_table_if_needed(ht);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过哈希函数获取bucket</span></span><br><span class="line">    int index = HASH_INDEX(ht, key);</span><br><span class="line">    B<span class="function"><span class="title">ucket</span> *tmp_bucket = ht-&gt;</span>buckets[index];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// key已经存在，循环冲突的链表，如果找到key则更新其value</span></span><br><span class="line">    <span class="keyword">while</span>(tmp_bucket) &#123;</span><br><span class="line">        <span class="function"><span class="title">if</span>(strcmp(key, tmp_bucket-&gt;</span>key) == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="function"><span class="title">tmp_bucket</span>-&gt;</span>value = value;</span><br><span class="line">            return SUCCESS;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="title">tmp_bucket</span> = tmp_bucket-&gt;</span>next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生成新的元素</span></span><br><span class="line">    Bucket *bucket = (Bucket *)malloc(sizeof(Bucket));</span><br><span class="line">    <span class="function"><span class="title">bucket</span>-&gt;</span>key   = key;</span><br><span class="line">    <span class="function"><span class="title">bucket</span>-&gt;</span>value = value;</span><br><span class="line">    <span class="function"><span class="title">bucket</span>-&gt;</span>next  = NULL;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>buckets[index]= bucket;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 总的元素+1</span></span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>elem_num += <span class="number">1</span>;</span><br><span class="line">    return SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重哈希"><a href="#重哈希" class="headerlink" title="重哈希"></a>重哈希</h3><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">伪代码</span><br><span class="line"></span><br><span class="line">resize_hash_table_if_needed(HashTable *ht)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// buckets的长度小于等于总的元素</span></span><br><span class="line">    <span class="function"><span class="title">if</span>(ht-&gt;</span><span class="function"><span class="title">size</span> - ht-&gt;</span>elem_num &lt; <span class="number">1</span>) &#123;</span><br><span class="line">        hash_resize(ht);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static int hash_resize(HashTable *ht)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 原来长度的两倍</span></span><br><span class="line">    <span class="function"><span class="title">int</span> org_size = ht-&gt;</span>size;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span><span class="function"><span class="title">size</span> = ht-&gt;</span>size * <span class="number">2</span>;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>elem_num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新的buckets</span></span><br><span class="line">    B<span class="function"><span class="title">ucket</span> **buckets = (Bucket **)calloc(ht-&gt;</span>size, sizeof(Bucket *));</span><br><span class="line"></span><br><span class="line">    B<span class="function"><span class="title">ucket</span> **org_buckets = ht-&gt;</span>buckets;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>buckets = buckets;</span><br><span class="line"></span><br><span class="line">    int i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i &lt; org_size; ++i) &#123;</span><br><span class="line">        Bucket *cur = org_buckets[i];</span><br><span class="line">        <span class="keyword">while</span>(cur) &#123;</span><br><span class="line">            <span class="comment">// 重哈希，重新插入</span></span><br><span class="line">            <span class="function"><span class="title">hash_insert</span>(ht, cur-&gt;</span><span class="function"><span class="title">key</span>, cur-&gt;</span>value);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 链表循环（冲突的hash值）</span></span><br><span class="line">            <span class="function"><span class="title">cur</span> = cur-&gt;</span>next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    free(org_buckets);</span><br><span class="line">    return SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="PHP中哈希表的实现"><a href="#PHP中哈希表的实现" class="headerlink" title="PHP中哈希表的实现"></a>PHP中哈希表的实现</h1><h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">bucket</span> &#123;</span></span><br><span class="line">    ulong h;            <span class="comment">// 如果键是数字，那么h指的就是数字；如果键是字符串，那么h指的是字符串经过hash后获得int型值</span></span><br><span class="line">    uint nKeyLength;    <span class="comment">// hash关键字的长度，如果数组索引为数字，此值为0</span></span><br><span class="line">    <span class="keyword">void</span> *pData;        <span class="comment">// 指向value，一般是用户数据的副本，如果是指针数据，则指向pDataPtr</span></span><br><span class="line">    <span class="keyword">void</span> *pDataPtr;     <span class="comment">// 如果是指针数据，此值会指向真正的vaule，同时上面pData会指向此值</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket</span> *<span class="title">pListNext</span>;</span> <span class="comment">// 整个hash表的下一个元素</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket</span> *<span class="title">pListLast</span>;</span> <span class="comment">// 整个hash表的上一个元素</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket</span> *<span class="title">pNext</span>;</span>     <span class="comment">// 同一个 Bucket内的下一个元素</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">bucket</span> *<span class="title">pLast</span>;</span>     <span class="comment">// 同一个 Bucket内的上一个元素</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *arKey;        <span class="comment">// 保存当前值所对于的key字符串，这个字段只能定义在最后，实现变长的结构体</span></span><br><span class="line">&#125; Bucket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">hashtable</span> &#123;</span></span><br><span class="line">    uint nTableSize;            <span class="comment">// hash Bucket的大小，最小为8， 以2n增长 nTableSize字段用于标示哈希表的容量</span></span><br><span class="line">    uint nTableMask;            <span class="comment">// nTableMask-1   索引取值的优化</span></span><br><span class="line">    uint nNumOfElements;        <span class="comment">// 整个hash table 中当前存在的元素个数，count() 函数会直接返回比值</span></span><br><span class="line">    ulong nNextFreeElement;     <span class="comment">// 下一个数字索引的位置</span></span><br><span class="line">    Bucket *pInternalPointer;   <span class="comment">/* Used for element traversal 当前遍历的指针 （foreach比for快的原因之一 ）*/</span></span><br><span class="line">    Bucket *pListHead;          <span class="comment">// 存储数组头元素指针</span></span><br><span class="line">    Bucket *pListTail;          <span class="comment">// 存储数组尾元素指针</span></span><br><span class="line">    Bucket **arBuckets;         <span class="comment">// 存储hash数组</span></span><br><span class="line">    <span class="keyword">dtor_func_t</span> pDestructor;    <span class="comment">// 在删除元素时执行的回调函数，用于资源的释放</span></span><br><span class="line">    zend_bool persistent;       <span class="comment">// 指出了Bucket内存的分配方式，如果persistent为true，则使用操作系统本身的内存分配函数为Bucket分配内存，否则使用PHP的内存分配函数</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> nApplyCount;  <span class="comment">// 标记当前 hash Bucket被递归访问的次数（防止多次递归）</span></span><br><span class="line">    zend_bool bApplyProtection; <span class="comment">// 标记当前hash桶运行不允许多次访问，不允许访问时，最多只能递归3次</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> ZEND_DEBUG</span></span><br><span class="line">    <span class="keyword">int</span> inconsistent;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125; HashTable;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>hashtable的pListHead存储数组头元素指针，bucket的pListNext 整个hash表的下一个元素<br><img src="http://oz5huhxgd.bkt.clouddn.com/201804092043_106.jpg" alt=""></li>
+<li>hashtable的pListTail存储数组尾元素指针，bucket的pListLast 整个hash表的上一个元素<br><img src="http://oz5huhxgd.bkt.clouddn.com/201804092050_718.jpg" alt=""></li>
+<li>bucket的pNext同一个hash Bucket内的下一个元素(红色) bucket的pLast同一个hash bucket的下一个元素<br><img src="http://oz5huhxgd.bkt.clouddn.com/201804092053_965.jpg" alt=""></li>
+</ul>
+<h2 id="哈希表的初始化-hash-init"><a href="#哈希表的初始化-hash-init" class="headerlink" title="哈希表的初始化 hash_init"></a>哈希表的初始化 hash_init</h2><figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Zend/zend_hash.c</span><br><span class="line"></span><br><span class="line">ZEND_API <span class="keyword">int</span> _zend_hash_init(HashTable *ht, <span class="keyword">uint</span> nSize, dtor_func_t pDestructor, zend_bool persistent ZEND_FILE_LINE_DC)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">uint</span> i = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    SET_INCONSISTENT(HT_OK);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nSize &gt;= <span class="number">0x80000000</span>) &#123;</span><br><span class="line">        <span class="comment">/* prevent overflow  防止溢出 */</span></span><br><span class="line">        ht-&gt;nTableSize = <span class="number">0x80000000</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> ((<span class="number">1</span>U &lt;&lt; i) &lt; nSize) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        ht-&gt;nTableSize = <span class="number">1</span> &lt;&lt; i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ht-&gt;nTableMask = <span class="number">0</span>; <span class="comment">/* 0意味着ht-&gt;arBuckets未初始化 */</span></span><br><span class="line">    ht-&gt;pDestructor = pDestructor;</span><br><span class="line">    ht-&gt;arBuckets = (Bucket**)&amp;uninitialized_bucket;</span><br><span class="line">    ht-&gt;pListHead = <span class="keyword">NULL</span>;</span><br><span class="line">    ht-&gt;pListTail = <span class="keyword">NULL</span>;</span><br><span class="line">    ht-&gt;nNumOfElements = <span class="number">0</span>;</span><br><span class="line">    ht-&gt;nNextFreeElement = <span class="number">0</span>;</span><br><span class="line">    ht-&gt;pInternalPointer = <span class="keyword">NULL</span>;</span><br><span class="line">    ht-&gt;persistent = persistent;</span><br><span class="line">    ht-&gt;nApplyCount = <span class="number">0</span>;</span><br><span class="line">    ht-&gt;bApplyProtection = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="计算哈希值"><a href="#计算哈希值" class="headerlink" title="计算哈希值"></a>计算哈希值</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">h = zend_inline_hash_func(arKey, nKeyLength);</span><br><span class="line">nIndex = h &amp; ht-&gt;nTableMask;</span><br><span class="line"></span><br><span class="line">ht-&gt;nTableMask的大小为ht-&gt;nTableSize <span class="number">-1</span>。 这里使用&amp;操作</span><br><span class="line">mask的作用就是将哈希值映射到槽位所能存储的索引范围内。 例如：某个<span class="type">key</span>的索引值是<span class="number">21</span>， 哈希表的大小为<span class="number">8</span>，则mask为<span class="number">7</span>，则求与时的二进制表示为： <span class="number">10101</span> &amp; <span class="number">111</span> = <span class="number">101</span> 也就是十进制的<span class="number">5</span>。</span><br></pre></td></tr></table></figure>
+<h2 id="插入内容到哈希表"><a href="#插入内容到哈希表" class="headerlink" title="插入内容到哈希表"></a>插入内容到哈希表</h2><p>建议看源码 <code>Zend/zend_hash.c 文件中 _zend_hash_add_or_update</code>函数</p>
+<ul>
+<li>如果Bucket中已经存在该元素，则遍历整个Bucket，查找是否存在相同的key值元素，如果有并且是update调用，则执行update数据操作。</li>
+<li>创建新的Bucket元素，初始化数据，并将新元素添加到当前hash值对应的Bucket链表的最前面（CONNECT_TO_BUCKET_DLLIST）。 这也是为什么上面图中 插入顺序为bucket1，bucket2，bucket3。bucket1与bucket2冲突，bucket2在前面的原因</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>HashTable 是采用拉链法解决hash冲突的，了解到计算哈希值的计算规则，一些黑客利用这个特性，插入许多hash冲突的元素，则会将时间复杂度O(1)退化到O(N)。</li>
+<li>HashTable 是使用两个结构进行存储的 hashtable和bucket，hashtable中存在一些必要的元素，例如：元素的总数，头指针、尾指针等，bucket中存在哈希冲突的指针和整个HashTable的指针。因此HashTable是双向链表，其中的bucket也是双向链表。</li>
+<li>HashTable是双向链表，因此实现 (array_pop 删除尾部元素 array_push 向尾部加入元素 array_shift 删除头部元素 array_unshift 向头增加元素) 轻而易举。</li>
+</ul>
+<p>参考文献<br>哈希冲突： <a href="https://blog.csdn.net/qq_27093465/article/details/52269862" target="_blank" rel="external">https://blog.csdn.net/qq_27093465/article/details/52269862</a><br>PHP中的hash算法： <a href="http://www.laruence.com/2009/07/23/994.html" target="_blank" rel="external">http://www.laruence.com/2009/07/23/994.html</a><br>PHP数组的Hash冲突实例：<a href="http://www.laruence.com/2011/12/30/2435.html" target="_blank" rel="external">http://www.laruence.com/2011/12/30/2435.html</a><br>哈希表(HashTable)：<a href="http://www.php-internals.com/book/?p=chapt03/03-01-01-hashtable" target="_blank" rel="external">http://www.php-internals.com/book/?p=chapt03/03-01-01-hashtable</a><br>PHP的哈希表实现： <a href="http://www.php-internals.com/book/?p=chapt03/03-01-02-hashtable-in-php" target="_blank" rel="external">http://www.php-internals.com/book/?p=chapt03/03-01-02-hashtable-in-php</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="xpisme wechat" style="width: 200px; max-width: 100%;"/>
+    <div>微信号</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/programming/2018/03/21/raid/" rel="next" title="磁盘阵列（RAID）">
+                <i class="fa fa-chevron-left"></i> 磁盘阵列（RAID）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/programming/2018/04/11/php-life-cycle/" rel="prev" title="PHP的生命周期">
+                PHP的生命周期 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="xpisme" />
+            
+              <p class="site-author-name" itemprop="name">xpisme</p>
+              <p class="site-description motion-element" itemprop="description">我们风华正茂，还有诗和远方。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/gxpisme" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:gxpisme@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.callmewhy.com/" title="汪海洋" target="_blank">汪海洋</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://php7plus.cn/" title="plus社区" target="_blank">plus社区</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#哈希表基本原理"><span class="nav-number">1.</span> <span class="nav-text">哈希表基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希函数"><span class="nav-number">1.1.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作接口"><span class="nav-number">1.2.</span> <span class="nav-text">操作接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内容插入到哈希表中"><span class="nav-number">1.2.2.</span> <span class="nav-text">内容插入到哈希表中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重哈希"><span class="nav-number">1.2.3.</span> <span class="nav-text">重哈希</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP中哈希表的实现"><span class="nav-number">2.</span> <span class="nav-text">PHP中哈希表的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储结构"><span class="nav-number">2.1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希表的初始化-hash-init"><span class="nav-number">2.2.</span> <span class="nav-text">哈希表的初始化 hash_init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算哈希值"><span class="nav-number">2.3.</span> <span class="nav-text">计算哈希值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入内容到哈希表"><span class="nav-number">2.4.</span> <span class="nav-text">插入内容到哈希表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xpisme</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("J4eX1h09IB9VwH8fNnTdeKRz-gzGzoHsz", "eYE1UlujnPLYVsxRVATqSlSR");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

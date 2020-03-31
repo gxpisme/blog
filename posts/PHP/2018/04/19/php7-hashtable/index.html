@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//static.xpisme.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PHP7之HashTable">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP7.2之HashTable">
+<meta property="og:url" content="http://gxpisme.github.io/posts/PHP/2018/04/19/php7-hashtable/index.html">
+<meta property="og:site_name" content="Xpisme&#39;s Blog">
+<meta property="og:description" content="PHP7之HashTable">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081201_783.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081243_951.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081254_414.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081949_328.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081950_430.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081950_526.png">
+<meta property="og:image" content="http://cdn.xpisme.com/201805081430_349.png">
+<meta property="og:updated_time" content="2019-01-05T08:49:54.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP7.2之HashTable">
+<meta name="twitter:description" content="PHP7之HashTable">
+<meta name="twitter:image" content="http://cdn.xpisme.com/201805081201_783.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://gxpisme.github.io/posts/PHP/2018/04/19/php7-hashtable/"/>
+
+
+
+
+
+  <title>PHP7.2之HashTable | Xpisme's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Xpisme's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我们风华正茂，还有诗和远方。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://gxpisme.github.io/posts/PHP/2018/04/19/php7-hashtable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xpisme">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xpisme's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP7.2之HashTable</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-19T12:32:16+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote class="blockquote-center"><p>PHP7之HashTable </p>
+</blockquote>
+<a id="more"></a>
+<ul>
+<li><strong>hashtable的基本原理</strong> <a href="http://blog.xpisme.com/posts/PHP/2018/04/09/php-hashtable/">http://blog.xpisme.com/posts/PHP/2018/04/09/php-hashtable/</a><h3 id="HashTable的数据结构"><a href="#HashTable的数据结构" class="headerlink" title="HashTable的数据结构"></a>HashTable的数据结构</h3>数据结构定义在<code>Zend/zend_types.h</code><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Bucket：散列表中存储的元素</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">Bucket</span> &#123;</span></span><br><span class="line">    zval              val;              <span class="comment">// 存储的具体value，这里嵌入一个zval结构</span></span><br><span class="line">    zend_ulong        h;                <span class="comment">/* key根据哈希算法计算得到的哈希值 或者是数字索引编号  hash value (or numeric index)   */</span></span><br><span class="line">    zend_string      *key;              <span class="comment">/* 存储元素的key  string key or NULL for numerics */</span></span><br><span class="line">&#125; Bucket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">zend_array</span> <span class="title">HashTable</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// array是PHP中非常强大的一个数据结构，它的底层实现就是普通有序HashTable</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_array</span> &#123;</span></span><br><span class="line">    zend_refcounted_h gc;   <span class="comment">// 引用计数，与字符串相同</span></span><br><span class="line">    <span class="keyword">union</span> &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            ZEND_ENDIAN_LOHI_4(</span><br><span class="line">                zend_uchar    flags,</span><br><span class="line">                zend_uchar    nApplyCount,</span><br><span class="line">                zend_uchar    nIteratorsCount,</span><br><span class="line">                zend_uchar    consistency)</span><br><span class="line">        &#125; v; </span><br><span class="line">        <span class="keyword">uint32_t</span> flags;</span><br><span class="line">    &#125; u; </span><br><span class="line">    <span class="keyword">uint32_t</span>          nTableMask;   <span class="comment">// 计算bucket索引时的掩码</span></span><br><span class="line">    Bucket           *arData;       <span class="comment">// bucket 数组</span></span><br><span class="line">    <span class="keyword">uint32_t</span>          nNumUsed;     <span class="comment">// 已用bucket数</span></span><br><span class="line">    <span class="keyword">uint32_t</span>          nNumOfElements; <span class="comment">// 已有元素数，nNumOfElements &lt;= nNumUsed，因为删除的并不是直接从arData中移除</span></span><br><span class="line">    <span class="keyword">uint32_t</span>          nTableSize;     <span class="comment">// 数组的大小 为2^n</span></span><br><span class="line">    <span class="keyword">uint32_t</span>          nInternalPointer; <span class="comment">// 数值索引</span></span><br><span class="line">    zend_long         nNextFreeElement;</span><br><span class="line">    <span class="keyword">dtor_func_t</span>       pDestructor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="zend-array中的-nNumUsed、nNumOfElements、nTableSize"><a href="#zend-array中的-nNumUsed、nNumOfElements、nTableSize" class="headerlink" title="_zend_array中的 nNumUsed、nNumOfElements、nTableSize"></a><code>_zend_array</code>中的 nNumUsed、nNumOfElements、nTableSize</h4><ul>
+<li>先来说nTableSize，在初始化的时候，会先定义数组的大小，初始化一般会定义8个空间，此时nTableSize就是8，但是它还是个空数组，因为只是定义了空间，并没有向空间中存值。</li>
+<li>再来说nNumUsed、nNumOfElements，如果向该数组中添加了3个元素，则nNumUsed=nNumOfElements=3。</li>
+<li>如果你unset其中一个元素，此时nNumOfElements=2，nNumUsed=3。</li>
+<li>图解如下：<br><img src="http://cdn.xpisme.com/201805081201_783.png" alt=""></li>
+</ul>
+<h4 id="zend-array中的-arData-bucket数组"><a href="#zend-array中的-arData-bucket数组" class="headerlink" title="_zend_array中的 *arData bucket数组"></a><code>_zend_array</code>中的 *arData bucket数组</h4><ul>
+<li>这个值指向存储元素数组的第一个Bucket</li>
+<li>插入元素时按顺序<strong>依次插入</strong>数组，比如第一个元素在arData[0]、第二个在arData[1]…arData[nNumUsed] (这里为什么是顺序递增的呢，将字符串哈希后，也不可能是顺序递增的呀？)</li>
+</ul>
+<h4 id="zend-array中的nTableMask"><a href="#zend-array中的nTableMask" class="headerlink" title="_zend_array中的nTableMask"></a><code>_zend_array</code>中的nTableMask</h4><p><code>_zend_array</code>中的nTableMask值为nTableSize的负数。用于计算散列值，计算方式如下<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nIndex = key-&gt;h | <span class="type">nTableMask</span>;</span><br></pre></td></tr></table></figure></p>
+<p>因为nTableSize大小为2的幂次方，则nTableMask为（-8，-16，-32，-64，-128 …）<br>key-&gt;h值为正整数，与nTableMask做或操作，可以得到[nTableMask, -1]之间的散列值。</p>
+<blockquote>
+<p>说明：<br>5用二进制表示 0000 0101 。 -5用5的反码加1（即补码表示）<br>5的原码为0000 0101  原码：自己本身的二进制编码<br>5的反码为1111 1010  反码：0变1, 1变0<br>5的补码为1111 1011<br>-5用二进制表示为：1111 1011</p>
+<p>3用二进制表示 0000 0011 。-3用3的反码加1（即补码表示）<br>3的原码为0000 0011  原码：自己本身的二进制编码<br>3的反码为1111 1100  反码：0变1, 1变0<br>3的补码为1111 1101<br>-3用二进制表示为：1111 1101</p>
+<p>8用二进制表示 0000 1000<br>-8用二进制表示 1111 1000</p>
+<p>5 | -8 = 0000 0101 | 1111 1000 = 1111 1101 = -3<br>3 | -8 = 0000 0011 | 1111 1000 = 1111 1011 = -5</p>
+</blockquote>
+<h4 id="神奇的arData-借助映射表-图解"><a href="#神奇的arData-借助映射表-图解" class="headerlink" title="神奇的arData 借助映射表(图解)"></a>神奇的arData 借助映射表(图解)</h4><h5 id="映射表原理"><a href="#映射表原理" class="headerlink" title="映射表原理"></a>映射表原理</h5><p><img src="http://cdn.xpisme.com/201805081243_951.png" alt=""></p>
+<h5 id="arData中映射表的存储"><a href="#arData中映射表的存储" class="headerlink" title="arData中映射表的存储"></a>arData中映射表的存储</h5><p><img src="http://cdn.xpisme.com/201805081254_414.png" alt=""></p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hash Table 初始化</span></span><br><span class="line">ZEND_API void ZEND_FASTCALL _zend_hash_init(HashTable *ht, uint32_t nSize, dtor_func_t pDestructor, zend_bool persistent ZEND_FILE_LINE_DC)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 初始化gc信息</span></span><br><span class="line">    GC_REFCOUNT(ht) = <span class="number">1</span>; </span><br><span class="line">    GC_TYPE_INFO(ht) = IS_ARRAY | (persistent ? <span class="number">0</span> : (GC_COLLECTABLE &lt;&lt; GC_FLAGS_SHIFT));</span><br><span class="line">    <span class="comment">// 设置flags</span></span><br><span class="line">    ht-&gt;u.flags = (persistent ? HASH_FLAG_PERSISTENT : <span class="number">0</span>) | HASH_FLAG_APPLY_PROTECTION | HASH_FLAG_STATIC_KEYS;</span><br><span class="line">    <span class="comment">//nTableMask的值是临时的</span></span><br><span class="line">    ht-&gt;nTableMask = HT_MIN_MASK;</span><br><span class="line">    <span class="comment">//临时设置ht-&gt;arData</span></span><br><span class="line">    HT_SET_DATA_ADDR(ht, &amp;uninitialized_bucket);</span><br><span class="line">    ht-&gt;nNumUsed = <span class="number">0</span>; </span><br><span class="line">    ht-&gt;nNumOfElements = <span class="number">0</span>; </span><br><span class="line">    ht-&gt;nInternalPointer = HT_INVALID_IDX;</span><br><span class="line">    ht-&gt;nNextFreeElement = <span class="number">0</span>; </span><br><span class="line">    ht-&gt;pDestructor = pDestructor;</span><br><span class="line">    <span class="comment">//这里会把数组大小设置为2的幂次方</span></span><br><span class="line">    ht-&gt;nTableSize = zend_hash_check_size(nSize);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此时的HashTable只是设置了散列表的大小及其他一些成员的初值，还无法用来存储元素。</li>
+</ul>
+<h3 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h3><h4 id="真正初始化"><a href="#真正初始化" class="headerlink" title="真正初始化"></a>真正初始化</h4><blockquote>
+<p>因为初始化_zend_hash_init并没有实际分配arData的内存，在第一次插入时才会根据nTableSize的大小分配，分配完后把HashTable-&gt;u.flags打上HASH_FLAG_INITIALIZED掩码，这样就标识已分配。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//_zend_hash_add_or_update_i 函数中的前几行</span></span><br><span class="line"><span class="keyword">if</span> (UNEXPECTED(!(ht-&gt;u.flags &amp; HASH_FLAG_INITIALIZED))) &#123;</span><br><span class="line">    CHECK_INIT(ht, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">goto</span> add_to_hash</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#define</span> <span class="selector-tag">CHECK_INIT</span>(ht, packed) \</span><br><span class="line">    <span class="selector-tag">zend_hash_check_init</span>(ht, packed)</span><br></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> zend_always_inline <span class="keyword">void</span> zend_hash_check_init(HashTable *ht, <span class="keyword">int</span> <span class="keyword">packed</span>)</span><br><span class="line">&#123;</span><br><span class="line">    HT_ASSERT_RC1(ht);</span><br><span class="line">    <span class="comment">//分配完后(ht)-&gt;u.flags 打上HASH_FLAG_INITIALIZED掩码</span></span><br><span class="line">    <span class="keyword">if</span> (UNEXPECTED(!((ht)-&gt;u<span class="variable">.flags</span> &amp; HASH_FLAG_INITIALIZED))) &#123;</span><br><span class="line">        zend_hash_real_init_ex(ht, <span class="keyword">packed</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>真正完成内存的分配用zend_hash_real_init_ex函数<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">static zend_always_inline void zend_hash_real_init_ex(HashTable *ht, int packed)</span><br><span class="line">&#123;</span><br><span class="line">    .....</span><br><span class="line"></span><br><span class="line">    <span class="comment">//设置nTableMask</span></span><br><span class="line">    (ht)-&gt;nTableMask = -(ht)-&gt;nTableSize;</span><br><span class="line">    <span class="comment">//分配Bucket数组及映射数组</span></span><br><span class="line">    HT_SET_DATA_ADDR(ht, pemalloc(HT_SIZE(ht), (ht)-&gt;u.flags &amp; HASH_FLAG_PERSISTENT));</span><br><span class="line">    <span class="comment">//(ht)-&gt;u.flags 打上HASH_FLAG_INITIALIZED掩码</span></span><br><span class="line">    (ht)-&gt;u.flags |= HASH_FLAG_INITIALIZED;</span><br><span class="line">    <span class="comment">//初始化映射数组的value为-1</span></span><br><span class="line">    if (EXPECTED(ht-&gt;nTableMask == (uint32_t)<span class="number">-8</span>)) &#123;</span><br><span class="line">        <span class="comment">//若只有8个值</span></span><br><span class="line">        Bucket *arData = ht-&gt;arData;</span><br><span class="line"></span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-8</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-7</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-6</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-5</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-4</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-3</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-2</span>) = <span class="number">-1</span>;</span><br><span class="line">        HT_HASH_EX(arData, <span class="number">-1</span>) = <span class="number">-1</span>;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        HT_HASH_RESET(ht);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    .....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//_zend_hash_add_or_update_i 中的add_to_hash</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用空间++，idx是bucket在arData中的存储位置</span></span><br><span class="line">    <span class="function"><span class="title">idx</span> = ht-&gt;</span>nNumUsed++;</span><br><span class="line">    <span class="function"><span class="title">ht</span>-&gt;</span>nNumOfElements++;</span><br><span class="line">    ....</span><br><span class="line">    <span class="comment">//找到存储bucket，设置key、value</span></span><br><span class="line">    <span class="function"><span class="title">p</span> = ht-&gt;</span>arData + idx;</span><br><span class="line">    <span class="function"><span class="title">p</span>-&gt;</span>h = h;</span><br><span class="line">    <span class="function"><span class="title">p</span>-&gt;</span>key = NULL;</span><br><span class="line">    <span class="comment">//计算中间映射表的散列值，idx将保存在映射数组的nIndex位置</span></span><br><span class="line">    <span class="function"><span class="title">nIndex</span> = h | ht-&gt;</span>nTableMask;</span><br><span class="line">    ZVAL_COPY_VALUE(&amp;<span class="function"><span class="title">p</span>-&gt;</span>val, pData);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将映射表中原来的值保存到新bucket中，哈希冲突会用到 nIndex的范围在[nTableMask, -1]</span></span><br><span class="line">    <span class="comment">// 这里的p就是bucket  Z_NEXT就是zval结构中指向下一个元素</span></span><br><span class="line">    Z_NEXT(<span class="function"><span class="title">p</span>-&gt;</span>val) = HT_HASH(ht, nIndex);</span><br><span class="line">    <span class="comment">// 保存idx ((uint32_t*)(ht-&gt;arData))[nIndex] = idx</span></span><br><span class="line">    HT_HASH(ht, nIndex) = HT_IDX_TO_HASH(idx);</span><br></pre></td></tr></table></figure>
+<h3 id="哈希冲突"><a href="#哈希冲突" class="headerlink" title="哈希冲突"></a>哈希冲突</h3><blockquote>
+<p>不同元素的key可能计算得到相同的哈希值，这些具有相同哈希值的元素。散列表时就会发生冲突，应为映射表中只能存储一个元素。解决方法是把冲突的bucket串成链表，这样一来中间映射表映射出的就不再是一个Bucket，而是一个Bucket链表。</p>
+</blockquote>
+<p>核心代码如下<br><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先把旧的值保存到新插入元素中，新插入的元素为链表的头部</span></span><br><span class="line">Z_NEXT(p-&gt;val) = HT_HASH(ht, nIndex);</span><br><span class="line"><span class="comment">// 再把新元素数组存储位置更新到映射表中</span></span><br><span class="line">HT_HASH(ht, nIndex) = HT_IDX_TO_HASH(idx);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//zval结构中u2有个next指针</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">_zval_struct</span></span> &#123;</span><br><span class="line">    zend_value        value;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        .....</span><br><span class="line">    &#125; u1;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        uint32_t     next; <span class="comment">//用于解决哈希冲突</span></span><br><span class="line">        ....</span><br><span class="line">    &#125; u2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><img src="http://cdn.xpisme.com/201805081949_328.png" alt=""><br><img src="http://cdn.xpisme.com/201805081950_430.png" alt=""><br><img src="http://cdn.xpisme.com/201805081950_526.png" alt=""></p>
+<h3 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h3><h4 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h4><ol>
+<li>首先根据key计算出hash code，hash code存放在zend_string-&gt;h</li>
+<li>计算散列值nIndex，zend_string-&gt;h | nTableMask</li>
+<li>然后根据散列值nIndex从散列表得到idx，idx为有序数组中的位置</li>
+<li>接着根据idx从有序数组HashTable-&gt;arData中获取Bucket。</li>
+<li>判断Bucket的key是否是要查找的key，如果是则终止遍历，否则继续根据zval.u2.next遍历比较</li>
+</ol>
+<h4 id="详细代码"><a href="#详细代码" class="headerlink" title="详细代码"></a>详细代码</h4><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Hash Table 查找</span></span><br><span class="line"><span class="keyword">static</span> zend_always_inline Bucket *zend_hash_find_bucket(<span class="keyword">const</span> HashTable *ht, zend_string *<span class="built_in">key</span>)</span><br><span class="line">&#123;</span><br><span class="line">    zend_ulong h;</span><br><span class="line">    uint32_t nIndex;</span><br><span class="line">    uint32_t idx; </span><br><span class="line">    Bucket *p, *arData;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将字符串获得数字</span></span><br><span class="line">    h = zend_string_hash_val(<span class="built_in">key</span>);</span><br><span class="line">    arData = ht-&gt;arData;</span><br><span class="line">    <span class="comment">//计算散列值</span></span><br><span class="line">    nIndex = h | ht-&gt;nTableMask;</span><br><span class="line">    <span class="comment">//获取Bucket存储位置</span></span><br><span class="line">    idx = HT_HASH_EX(arData, nIndex);</span><br><span class="line">    <span class="comment">//遍历</span></span><br><span class="line">    <span class="keyword">while</span> (EXPECTED(idx != HT_INVALID_IDX)) &#123;</span><br><span class="line">        <span class="comment">//通过idx获取值</span></span><br><span class="line">        p = HT_HASH_TO_BUCKET_EX(arData, idx);</span><br><span class="line">        <span class="comment">// key是string string与需要查找的相等</span></span><br><span class="line">        <span class="keyword">if</span> (EXPECTED(p-&gt;<span class="built_in">key</span> == <span class="built_in">key</span>)) &#123; <span class="comment">/* check for the same interned string */</span></span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (EXPECTED(p-&gt;h == h) &amp;&amp; <span class="comment">// 比较hash code</span></span><br><span class="line">             EXPECTED(p-&gt;<span class="built_in">key</span>) &amp;&amp;</span><br><span class="line">             EXPECTED(ZSTR_LEN(p-&gt;<span class="built_in">key</span>) == ZSTR_LEN(<span class="built_in">key</span>)) &amp;&amp; <span class="comment">// 比较key的长度</span></span><br><span class="line">             EXPECTED(memcmp(ZSTR_VAL(p-&gt;<span class="built_in">key</span>), ZSTR_VAL(<span class="built_in">key</span>), ZSTR_LEN(<span class="built_in">key</span>)) == <span class="number">0</span>)) &#123; <span class="comment">// 比较查找的key与Bucket的key是否匹配</span></span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;    </span><br><span class="line">        <span class="comment">// 哈希冲突 循环链表</span></span><br><span class="line">        idx = Z_NEXT(p-&gt;val);</span><br><span class="line">    &#125;    </span><br><span class="line">    <span class="keyword">return</span> NULL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h3><h4 id="扩容时机"><a href="#扩容时机" class="headerlink" title="扩容时机"></a>扩容时机</h4><blockquote>
+<p>数组的容量时有限的，最多可容纳nTableSize个元素。当在已经有NnTableSize个元素，再向里面插入时，则会触发扩容。</p>
+</blockquote>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">static</span> <span class="selector-tag">zend_always_inline</span> <span class="selector-tag">zval</span> *<span class="selector-tag">_zend_hash_add_or_update_i</span>(HashTable *ht, zend_string *key, zval *pData, uint32_t flag ZEND_FILE_LINE_DC)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 检查是否需要扩容</span></span><br><span class="line">    <span class="selector-tag">ZEND_HASH_IF_FULL_DO_RESIZE</span>(ht);</span><br><span class="line"></span><br><span class="line"><span class="attribute">add_to_hash</span>:</span><br><span class="line">    <span class="comment">//插入元素</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> HashTable 判断是否需要扩容并扩容 HashTable 最多可存储nTableSize个元素</span><br><span class="line"><span class="comment">#define ZEND_HASH_IF_FULL_DO_RESIZE(ht)             \</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="function"><span class="params">(ht)</span>-&gt;</span>nNumUsed &gt;= <span class="function"><span class="params">(ht)</span>-&gt;</span>nTableSize) &#123;       \</span><br><span class="line">        zend_hash_do_resize(ht);                    \</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="扩容过程"><a href="#扩容过程" class="headerlink" title="扩容过程"></a>扩容过程</h4><h5 id="大致扩容描述"><a href="#大致扩容描述" class="headerlink" title="大致扩容描述"></a>大致扩容描述</h5><ol>
+<li>检查数组中已经删除的元素所占的比例（也就是那些已经删除但未从存储数组中移除的元素）</li>
+<li>如果比例达到阈值则触发重建索引的操作，会把删除的Bucket移除。</li>
+<li>如果比例未达到阈值，则会分配一个原数组大小2倍的新数组，然后把原数组的元素复制到新数组中，最后重建索引。</li>
+</ol>
+<h5 id="阈值判断"><a href="#阈值判断" class="headerlink" title="阈值判断"></a>阈值判断</h5><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">ht</span>-&gt;</span><span class="function"><span class="title">nNumUsed</span> &gt; ht-&gt;</span><span class="function"><span class="title">nNumOfElements</span> + (ht-&gt;</span>nNumOfElements &gt;&gt; <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="具体处理过程的代码"><a href="#具体处理过程的代码" class="headerlink" title="具体处理过程的代码"></a>具体处理过程的代码</h5><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">static void ZEND_FASTCALL zend_hash_do_resize(HashTable *ht)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    IS_CONSISTENT(ht);</span><br><span class="line">    HT_ASSERT_RC1(ht);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">if</span> (ht-&gt;</span><span class="function"><span class="title">nNumUsed</span> &gt; ht-&gt;</span><span class="function"><span class="title">nNumOfElements</span> + (ht-&gt;</span>nNumOfElements &gt;&gt; <span class="number">5</span>)) &#123; <span class="comment">/* additional term is there to amortize the cost of compaction */</span></span><br><span class="line">        <span class="comment">// 只有到一定阈值才进行rehash</span></span><br><span class="line">        zend_hash_rehash(ht); <span class="comment">// 重建索引数组</span></span><br><span class="line">    &#125; <span class="function"><span class="title">else</span> <span class="keyword">if</span> (ht-&gt;</span>nTableSize &lt; HT_MAX_SIZE) &#123;  <span class="comment">/* Let's double the table size */</span></span><br><span class="line">        void *new_data, *old_data = HT_GET_DATA_ADDR(ht);</span><br><span class="line">        <span class="comment">// 扩大为2倍，加法要比乘法快</span></span><br><span class="line">        <span class="function"><span class="title">uint32_t</span> nSize = ht-&gt;</span><span class="function"><span class="title">nTableSize</span> + ht-&gt;</span>nTableSize;</span><br><span class="line">        B<span class="function"><span class="title">ucket</span> *old_buckets = ht-&gt;</span>arData;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//新分配arData空间 大小为(sizeof(Bucket)+sizeof(uint32_t)) * nSize</span></span><br><span class="line">        <span class="function"><span class="title">new_data</span> = pemalloc(HT_SIZE_EX(nSize, -nSize), ht-&gt;</span>u.flags &amp; HASH_FLAG_PERSISTENT);</span><br><span class="line">        <span class="function"><span class="title">ht</span>-&gt;</span>nTableSize = nSize;</span><br><span class="line">        <span class="function"><span class="title">ht</span>-&gt;</span><span class="function"><span class="title">nTableMask</span> = -ht-&gt;</span>nTableSize;</span><br><span class="line">        <span class="comment">//将arData指针偏移到Bucket数组起始位置</span></span><br><span class="line">        HT_SET_DATA_ADDR(ht, new_data);</span><br><span class="line">        <span class="comment">//将旧的bucket数组赋值到新的空间</span></span><br><span class="line">        <span class="function"><span class="title">memcpy</span>(ht-&gt;</span><span class="function"><span class="title">arData</span>, old_buckets, sizeof(Bucket) * ht-&gt;</span>nNumUsed);</span><br><span class="line">        <span class="comment">//释放旧的空间</span></span><br><span class="line">        <span class="function"><span class="title">pefree</span>(old_data, ht-&gt;</span>u.flags &amp; HASH_FLAG_PERSISTENT);</span><br><span class="line">        <span class="comment">//重建索引</span></span><br><span class="line">        zend_hash_rehash(ht);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="function"><span class="title">zend_error_noreturn</span>(E_ERROR, "Possible <span class="keyword">integer</span> overflow <span class="built_in">in</span> memory allocation (%u * %zu + %zu)", ht-&gt;</span>nTableSize * <span class="number">2</span>, sizeof(Bucket) + sizeof(uint32_t), sizeof(Bucket));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="重建索引-zend-hash-rehash"><a href="#重建索引-zend-hash-rehash" class="headerlink" title="重建索引 zend_hash_rehash"></a>重建索引 zend_hash_rehash</h5><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ZEND_API int ZEND_FASTCALL zend_hash_rehash(HashTable *ht)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="function"><span class="title">nIndex</span> = p-&gt;</span><span class="function"><span class="title">h</span> | ht-&gt;</span>nTableMask;</span><br><span class="line">        <span class="comment">//将映射表中原来的值保存到新Bucket中，HT_HASH(ht, nIndex)这个函数得到的值映射表中存储的idx值,将idx值放到新的bucket(新bucket就是 刚刚生成的)的next字段中  哈希冲突时会用到</span></span><br><span class="line">        Z_NEXT(<span class="function"><span class="title">p</span>-&gt;</span>val) = HT_HASH(ht, nIndex);</span><br><span class="line">        <span class="comment">//在映射表中保存idx的值</span></span><br><span class="line">        HT_HASH(ht, nIndex) = HT_IDX_TO_HASH(i);</span><br><span class="line">        p++;</span><br><span class="line">    &#125; <span class="function"><span class="title">while</span> (++i &lt; ht-&gt;</span>nNumUsed);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重建索引的过程还会将已删除的Bucket删除，移除后会把这个Bucket之后的元素全部向前移动一个位置，所以在重建索引后存储数组中元素全部紧密排列。</li>
+</ul>
+<h3 id="附加-宏的定义"><a href="#附加-宏的定义" class="headerlink" title="附加 宏的定义"></a>附加 宏的定义</h3><h4 id="HT-SET-DATA-ADDR"><a href="#HT-SET-DATA-ADDR" class="headerlink" title="HT_SET_DATA_ADDR"></a>HT_SET_DATA_ADDR</h4><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">设置HashTable arData的位置</span><br><span class="line"><span class="comment">#define HT_SET_DATA_ADDR(ht, ptr) do &#123; \</span></span><br><span class="line">        <span class="function"><span class="params">(ht)</span>-&gt;</span><span class="function"><span class="title">arData</span> = <span class="params">(Bucket*)(((char*)(ptr)) + HT_HASH_SIZE((ht)-&gt;nTableMask))</span>; \</span></span><br><span class="line"><span class="function">    &#125; <span class="title">while</span> <span class="params">(<span class="number">0</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p><img src="http://cdn.xpisme.com/201805081430_349.png" alt=""></p>
+<h4 id="HT-HASH-EX、HT-HASH、HT-HASH-RESET"><a href="#HT-HASH-EX、HT-HASH、HT-HASH-RESET" class="headerlink" title="HT_HASH_EX、HT_HASH、HT_HASH_RESET"></a>HT_HASH_EX、HT_HASH、HT_HASH_RESET</h4><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// <span class="class"><span class="keyword">data</span>[idx]</span></span><br><span class="line"><span class="meta">#define HT_HASH_EX(data, idx) \</span></span><br><span class="line">    ((uint32_t*)(<span class="class"><span class="keyword">data</span>))[(<span class="title">int32_t</span>)(<span class="title">idx</span>)]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span> HashTable-&gt;arrData[idx]</span><br><span class="line"><span class="comment">#define HT_HASH(ht, idx) \</span></span><br><span class="line">    HT_HASH_EX(<span class="function"><span class="params">(ht)</span>-&gt;</span>arData, idx)</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">//</span>将HashTable-&gt;arrData[<span class="number">-1</span>]到[nTableMask]均设置为HT_INVALID_IDX（<span class="number">-1</span>）</span><br><span class="line"><span class="comment">#define HT_HASH_RESET(ht) \</span></span><br><span class="line">    memset(&amp;HT_HASH(ht, <span class="function"><span class="params">(ht)</span>-&gt;</span>nTableMask), HT_INVALID_IDX, HT_HASH_SIZE(<span class="function"><span class="params">(ht)</span>-&gt;</span>nTableMask))</span><br></pre></td></tr></table></figure>
+<h4 id="HT-IDX-TO-HASH"><a href="#HT-IDX-TO-HASH" class="headerlink" title="HT_IDX_TO_HASH"></a>HT_IDX_TO_HASH</h4><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//idx*bucket的大小</span></span><br><span class="line"><span class="class"><span class="keyword">define</span> <span class="title">HT_IDX_TO_HASH</span></span>(idx) \</span><br><span class="line">    ((idx) * sizeof(Bucket))</span><br></pre></td></tr></table></figure>
+<h4 id="Z-NEXT"><a href="#Z-NEXT" class="headerlink" title="Z_NEXT"></a>Z_NEXT</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">#def</span>ine Z_NEXT(zval)                (zval)<span class="selector-class">.u2</span><span class="selector-class">.next</span></span><br></pre></td></tr></table></figure>
+<p>参考资料<br><a href="https://www.dayexie.com/detail282389.html" target="_blank" rel="external">https://www.dayexie.com/detail282389.html</a><br><a href="http://gywbd.github.io/posts/2014/12/php7-new-hashtable-implementation.html" target="_blank" rel="external">http://gywbd.github.io/posts/2014/12/php7-new-hashtable-implementation.html</a><br>PHP7内核剖析</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="xpisme wechat" style="width: 200px; max-width: 100%;"/>
+    <div>微信号</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/PHP/2018/04/17/php7-2-zval/" rel="next" title="PHP7.2的变量 zval 结构">
+                <i class="fa fa-chevron-left"></i> PHP7.2的变量 zval 结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/PHP/2018/05/08/php7-garbage-collection/" rel="prev" title="php7 垃圾回收">
+                php7 垃圾回收 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="xpisme" />
+            
+              <p class="site-author-name" itemprop="name">xpisme</p>
+              <p class="site-description motion-element" itemprop="description">我们风华正茂，还有诗和远方。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/gxpisme" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:gxpisme@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                大牛链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.laruence.com/" title="Laruence" target="_blank">Laruence</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://coolshell.cn/" title="左耳朵耗子" target="_blank">左耳朵耗子</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog" title="阮一峰" target="_blank">阮一峰</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashTable的数据结构"><span class="nav-number">1.</span> <span class="nav-text">HashTable的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#zend-array中的-nNumUsed、nNumOfElements、nTableSize"><span class="nav-number">1.1.</span> <span class="nav-text">_zend_array中的 nNumUsed、nNumOfElements、nTableSize</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zend-array中的-arData-bucket数组"><span class="nav-number">1.2.</span> <span class="nav-text">_zend_array中的 *arData bucket数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zend-array中的nTableMask"><span class="nav-number">1.3.</span> <span class="nav-text">_zend_array中的nTableMask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#神奇的arData-借助映射表-图解"><span class="nav-number">1.4.</span> <span class="nav-text">神奇的arData 借助映射表(图解)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#映射表原理"><span class="nav-number">1.4.1.</span> <span class="nav-text">映射表原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#arData中映射表的存储"><span class="nav-number">1.4.2.</span> <span class="nav-text">arData中映射表的存储</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入元素"><span class="nav-number">3.</span> <span class="nav-text">插入元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#真正初始化"><span class="nav-number">3.1.</span> <span class="nav-text">真正初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加元素"><span class="nav-number">3.2.</span> <span class="nav-text">添加元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希冲突"><span class="nav-number">4.</span> <span class="nav-text">哈希冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找元素"><span class="nav-number">5.</span> <span class="nav-text">查找元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#具体过程"><span class="nav-number">5.1.</span> <span class="nav-text">具体过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细代码"><span class="nav-number">5.2.</span> <span class="nav-text">详细代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩容"><span class="nav-number">6.</span> <span class="nav-text">扩容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩容时机"><span class="nav-number">6.1.</span> <span class="nav-text">扩容时机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩容过程"><span class="nav-number">6.2.</span> <span class="nav-text">扩容过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#大致扩容描述"><span class="nav-number">6.2.1.</span> <span class="nav-text">大致扩容描述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#阈值判断"><span class="nav-number">6.2.2.</span> <span class="nav-text">阈值判断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#具体处理过程的代码"><span class="nav-number">6.2.3.</span> <span class="nav-text">具体处理过程的代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重建索引-zend-hash-rehash"><span class="nav-number">6.2.4.</span> <span class="nav-text">重建索引 zend_hash_rehash</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附加-宏的定义"><span class="nav-number">7.</span> <span class="nav-text">附加 宏的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HT-SET-DATA-ADDR"><span class="nav-number">7.1.</span> <span class="nav-text">HT_SET_DATA_ADDR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HT-HASH-EX、HT-HASH、HT-HASH-RESET"><span class="nav-number">7.2.</span> <span class="nav-text">HT_HASH_EX、HT_HASH、HT_HASH_RESET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HT-IDX-TO-HASH"><span class="nav-number">7.3.</span> <span class="nav-text">HT_IDX_TO_HASH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Z-NEXT"><span class="nav-number">7.4.</span> <span class="nav-text">Z_NEXT</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xpisme</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
