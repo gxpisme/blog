@@ -403,7 +403,7 @@
 </blockquote>
 <h2 id="为什么会有ARP协议？"><a href="#为什么会有ARP协议？" class="headerlink" title="为什么会有ARP协议？"></a>为什么会有ARP协议？</h2><p>只要确定了IP地址，就可以向IP地址发送IP数据报。然而，在底层数据链路层，进行实际通信时必须知道每个IP地址对应的MAC地址。</p>
 <p>工作在数据链路层， 就得用MAC地址。</p>
-<p>由于网络层下一层是数据链路层，在数据链路层需要知道MAC地址。由于知道IP地址<strong><a href="http://blog.xpisme.com/posts/TCP-IP/2018/08/01/dns/" title="DNS">通过DNS 域名解析服务器获取IP地址</a></strong>，通过IP地址获取MAC地址，这就是 ARP协议。ARP协议用于找到MAC地址。</p>
+<p>由于网络层下一层是数据链路层，在数据链路层需要知道MAC地址。由于知道IP地址<strong><a href="http://blog.xpisme.com/posts/TCP-IP/2018/08/01/dns/" title="DNS" target="_blank" rel="external">通过DNS 域名解析服务器获取IP地址</a></strong>，通过IP地址获取MAC地址，这就是 ARP协议。ARP协议用于找到MAC地址。</p>
 <h2 id="ARP协议-工作原理"><a href="#ARP协议-工作原理" class="headerlink" title="ARP协议 工作原理"></a>ARP协议 工作原理</h2><p><img src="http://cdn.xpisme.com/201809111619_372.png" alt=""></p>
 <ul>
 <li>主机A通过广播发送一个ARP请求包。ARP请求包中包含了想要了解其MAC地址的主机IP地址。</li>
